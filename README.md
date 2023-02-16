@@ -1,2 +1,2 @@
 # inventoryCRUD
-Inventory CRUD app using NodeJS/Express + MongoDB
+Music Store Inventory CRUD app using NodeJS/Express + MongoDB
