@@ -8,7 +8,6 @@ var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-const { mainModule } = require("process");
 
 var app = express();
 dotenv.config();
@@ -17,7 +16,7 @@ dotenv.config();
 mongoose.set("strictQuery", false);
 const mongoDB = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster1.kuntt1d.mongodb.net/?retryWrites=true&w=majority`;
 
-main.catch((err) => console.log(err));
+main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
 }
