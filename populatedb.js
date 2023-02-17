@@ -1,24 +1,13 @@
 #! /usr/bin/env node
-
-console.log(
-  "This script populates some test books, authors, genres and bookinstances to your database. Specified database as argument - e.g.: populatedb mongodb+srv://cooluser:coolpassword@cluster0.a9azn.mongodb.net/local_library?retryWrites=true"
-);
-
-// Get arguments passed on command line
-var userArgs = process.argv.slice(2);
-/*
-if (!userArgs[0].startsWith('mongodb')) {
-    console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
-    return
-}
-*/
 var async = require("async");
 var Instrument = require("./models/Instrument");
 var Type = require("./models/Type");
 var Brand = require("./models/Brand");
+const dotenv = require("dotenv");
+dotenv.config();
 
 var mongoose = require("mongoose");
-var mongoDB = userArgs[0];
+const mongoDB = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster1.kuntt1d.mongodb.net/?retryWrites=true&w=majority`;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
@@ -30,7 +19,15 @@ const brands = [];
 const types = [];
 
 // Helper functions to store info to be created in the db
-function instrumentCreate(name, type, brand, price, numberInStock, imageURL) {
+function instrumentCreate(
+  name,
+  type,
+  brand,
+  price,
+  numberInStock,
+  imageURL,
+  cb
+) {
   instrumentDetail = {
     name,
     type,
@@ -44,6 +41,7 @@ function instrumentCreate(name, type, brand, price, numberInStock, imageURL) {
 
   instrument.save(function (err) {
     if (err) {
+      console.log(err);
       cb(err, null);
       return;
     }
@@ -53,8 +51,8 @@ function instrumentCreate(name, type, brand, price, numberInStock, imageURL) {
   });
 }
 
-function brandCreate(name, types, instruments) {
-  const genre = new Brand({ name: name, description });
+function brandCreate(name, description, cb) {
+  const brand = new Brand({ name, description });
 
   brand.save(function (err) {
     if (err) {
@@ -67,13 +65,13 @@ function brandCreate(name, types, instruments) {
   });
 }
 
-function typeCreate(name, description, brands) {
+function typeCreate(name, description, cb) {
   typeDetail = {
     name,
     description,
   };
 
-  const type = new Type(typedetail);
+  const type = new Type(typeDetail);
   type.save(function (err) {
     if (err) {
       cb(err, null);
@@ -144,7 +142,7 @@ function createTypesBrands(cb) {
       function (callback) {
         brandCreate(
           "Yamaha",
-          `Yamaha Corporation (ヤマハ株式会社, Yamaha kabushiki gaisha, /ˈjæməˌhɑː/; Japanese pronunciation: [jamaha]) is a Japanese multinational corporation and conglomerate with a very wide range of products and services. It is one of the constituents of Nikkei 225 and is the world's largest musical instrument manufacturing company. The former motorcycle division was established in 1955 as Yamaha Motor Co., Ltd., which started as an affiliated company but later became independent, although Yamaha Corporation is still a major shareholder. `,
+          "Yamaha Corporation (ヤマハ株式会社, Yamaha kabushiki gaisha, /ˈjæməˌhɑː/; Japanese pronunciation: [jamaha]) is a Japanese multinational corporation and conglomerate with a very wide range of products and services. It is one of the constituents of Nikkei 225 and is the world's largest musical instrument manufacturing company. The former motorcycle division was established in 1955 as Yamaha Motor Co., Ltd., which started as an affiliated company but later became independent, although Yamaha Corporation is still a major shareholder.",
           callback
         );
       },
@@ -171,14 +169,40 @@ function createInstrumentInstances(cb) {
         );
       },
       function (callback) {
-        "Player Stratocaster 3-color",
-          brands[0],
-          types[2],
+        instrumentCreate(
+          "Player Stratocaster 3-color",
+          [brands[0]],
+          [types[2]],
           8999,
           3,
           "The inspiring sound of a Stratocaster is one of the foundations of Fender. Featuring this classic sound—bell-like high end, punchy mids and robust low end, combined with crystal-clear articulation—the fat-sounding Player Stratocaster HSH is packed with authentic Fender feel and style. It’s ready to serve your musical vision, it’s versatile enough to handle any style of music and it’s the perfect platform for creating your own sound.",
-          "https://firebasestorage.googleapis.com/v0/b/musicstorestorage.appspot.com/o/Screenshot%20from%202023-02-17%2006-37-19.png?alt=media&token=172b00cf-f91b-4158-a310-a4c692c51cf2";
-        callback;
+          "https://firebasestorage.googleapis.com/v0/b/musicstorestorage.appspot.com/o/Screenshot%20from%202023-02-17%2006-37-19.png?alt=media&token=172b00cf-f91b-4158-a310-a4c692c51cf2",
+          callback
+        );
+      },
+      function (callback) {
+        instrumentCreate(
+          "PSR Series PSR-F51",
+          [brands[2]],
+          [types[3]],
+          699,
+          15,
+          "Our principal aim in designing the PSR-F51 was basic functionality that is both straightforward and user-friendly. As a result, we have developed a keyboard that anyone will find easy to operate and play. Using the intuitive panel, simply select a voice and rhythm to start playing. The PSR-F51's compact and lightweight design packs in a regular size keyboard together with 61 keys, 120 Voices and 114 Rhythms from all over the world. What’s more, this instrument is ideally suited to a wide range of different playing scenarios; not only is the PSR-F51 great for beginners and students, you can also power it with batteries for musical performance on the road. ",
+          "https://firebasestorage.googleapis.com/v0/b/musicstorestorage.appspot.com/o/Screenshot%20from%202023-02-17%2006-45-21.png?alt=media&token=30ed7999-dbe2-4c3a-af33-03f97531e4b5",
+          callback
+        );
+      },
+      function (callback) {
+        instrumentCreate(
+          "GigMaker",
+          [brands[2]],
+          [types[4]],
+          7799,
+          4,
+          "The new Yamaha GigMaker drum set is exactly what any beginner or intermediate player would love to play. This drum set utilizes all Yamaha hardware featuring hex tom ball joints with 5 new unique wrapped sparkle finishes.",
+          "https://firebasestorage.googleapis.com/v0/b/musicstorestorage.appspot.com/o/Screenshot%20from%202023-02-17%2006-48-34.png?alt=media&token=afdaa514-8698-43ba-beb6-ee0e0080a103",
+          callback
+        );
       },
     ],
     // optional callback
@@ -186,110 +210,14 @@ function createInstrumentInstances(cb) {
   );
 }
 
-function createBookInstances(cb) {
-  async.parallel(
-    [
-      function (callback) {
-        bookInstanceCreate(
-          books[0],
-          "London Gollancz, 2014.",
-          false,
-          "Available",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[1],
-          " Gollancz, 2011.",
-          false,
-          "Loaned",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[2],
-          " Gollancz, 2015.",
-          false,
-          false,
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[3],
-          "New York Tom Doherty Associates, 2016.",
-          false,
-          "Available",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[3],
-          "New York Tom Doherty Associates, 2016.",
-          false,
-          "Available",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[3],
-          "New York Tom Doherty Associates, 2016.",
-          false,
-          "Available",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[4],
-          "New York, NY Tom Doherty Associates, LLC, 2015.",
-          false,
-          "Available",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[4],
-          "New York, NY Tom Doherty Associates, LLC, 2015.",
-          false,
-          "Maintenance",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[4],
-          "New York, NY Tom Doherty Associates, LLC, 2015.",
-          false,
-          "Loaned",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(books[0], "Imprint XXX2", false, false, callback);
-      },
-      function (callback) {
-        bookInstanceCreate(books[1], "Imprint XXX3", false, false, callback);
-      },
-    ],
-    // Optional callback
-    cb
-  );
-}
-
 async.series(
-  [createGenreAuthors, createBooks, createBookInstances],
+  [createTypesBrands, createInstrumentInstances],
   // Optional callback
   function (err, results) {
     if (err) {
       console.log("FINAL ERR: " + err);
     } else {
-      console.log("BOOKInstances: " + bookinstances);
+      console.log("Instruments" + instruments);
     }
     // All done, disconnect from database
     mongoose.connection.close();
