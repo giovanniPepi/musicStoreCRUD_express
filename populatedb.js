@@ -13,10 +13,9 @@ if (!userArgs[0].startsWith('mongodb')) {
 }
 */
 var async = require("async");
-var Book = require("./models/book");
-var Author = require("./models/author");
-var Genre = require("./models/genre");
-var BookInstance = require("./models/bookinstance");
+var Instrument = require("./models/Instrument");
+var Type = require("./models/Type");
+var Brand = require("./models/Brand");
 
 var mongoose = require("mongoose");
 var mongoDB = userArgs[0];
@@ -25,111 +24,82 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-var authors = [];
-var genres = [];
-var books = [];
-var bookinstances = [];
+// Store the created items in an array
+const instruments = [];
+const brands = [];
+const types = [];
 
-function authorCreate(first_name, family_name, d_birth, d_death, cb) {
-  authordetail = { first_name: first_name, family_name: family_name };
-  if (d_birth != false) authordetail.date_of_birth = d_birth;
-  if (d_death != false) authordetail.date_of_death = d_death;
-
-  var author = new Author(authordetail);
-
-  author.save(function (err) {
-    if (err) {
-      cb(err, null);
-      return;
-    }
-    console.log("New Author: " + author);
-    authors.push(author);
-    cb(null, author);
-  });
-}
-
-function genreCreate(name, cb) {
-  var genre = new Genre({ name: name });
-
-  genre.save(function (err) {
-    if (err) {
-      cb(err, null);
-      return;
-    }
-    console.log("New Genre: " + genre);
-    genres.push(genre);
-    cb(null, genre);
-  });
-}
-
-function bookCreate(title, summary, isbn, author, genre, cb) {
-  bookdetail = {
-    title: title,
-    summary: summary,
-    author: author,
-    isbn: isbn,
+// Helper functions to store info to be created in the db
+function instrumentCreate(name, type, brand, price, numberInStock, imageURL) {
+  instrumentDetail = {
+    name,
+    type,
+    brand,
+    price,
+    numberInStock,
+    imageURL,
   };
-  if (genre != false) bookdetail.genre = genre;
 
-  var book = new Book(bookdetail);
-  book.save(function (err) {
+  const instrument = new Instrument(instrumentDetail);
+
+  instrument.save(function (err) {
     if (err) {
       cb(err, null);
       return;
     }
-    console.log("New Book: " + book);
-    books.push(book);
-    cb(null, book);
+    console.log("New Instrument: " + instrument);
+    instruments.push(instrument);
+    cb(null, instrument);
   });
 }
 
-function bookInstanceCreate(book, imprint, due_back, status, cb) {
-  bookinstancedetail = {
-    book: book,
-    imprint: imprint,
+function brandCreate(name, types, instruments) {
+  const genre = new Brand({ name: name, types: types, instruments });
+
+  brand.save(function (err) {
+    if (err) {
+      cb(err, null);
+      return;
+    }
+    console.log("New Brand: " + brand);
+    brands.push(brand);
+    cb(null, brand);
+  });
+}
+
+function typeCreate(name, description, brands) {
+  typeDetail = {
+    name,
+    description,
+    brands,
   };
-  if (due_back != false) bookinstancedetail.due_back = due_back;
-  if (status != false) bookinstancedetail.status = status;
 
-  var bookinstance = new BookInstance(bookinstancedetail);
-  bookinstance.save(function (err) {
+  const type = new Type(typedetail);
+  type.save(function (err) {
     if (err) {
-      console.log("ERROR CREATING BookInstance: " + bookinstance);
       cb(err, null);
       return;
     }
-    console.log("New BookInstance: " + bookinstance);
-    bookinstances.push(bookinstance);
-    cb(null, book);
+    console.log("New Type: " + type);
+    types.push(type);
+    cb(null, type);
   });
 }
 
-function createGenreAuthors(cb) {
+// This function will call our helper function to create the items
+function createInstrumentInstances(cb) {
   async.series(
     [
       function (callback) {
-        authorCreate("Patrick", "Rothfuss", "1973-06-06", false, callback);
-      },
-      function (callback) {
-        authorCreate("Ben", "Bova", "1932-11-8", false, callback);
-      },
-      function (callback) {
-        authorCreate("Isaac", "Asimov", "1920-01-02", "1992-04-06", callback);
-      },
-      function (callback) {
-        authorCreate("Bob", "Billings", false, false, callback);
-      },
-      function (callback) {
-        authorCreate("Jim", "Jones", "1971-12-16", false, callback);
-      },
-      function (callback) {
-        genreCreate("Fantasy", callback);
-      },
-      function (callback) {
-        genreCreate("Science Fiction", callback);
-      },
-      function (callback) {
-        genreCreate("French Poetry", callback);
+        instrumentCreate(
+          "TRBX 304",
+          "Bass guitar",
+          "Yamaha",
+          3300,
+          5,
+          "https://firebasestorage.googleapis.com/v0/b/musicstorestorage.appspot.com/o/TRBX304MGR-large.jpg.auto.webp?alt=media&token=93a3a6bc-e174-4d12-b3f1-febad1e5ddec",
+          callback
+        );
       },
     ],
     // optional callback
