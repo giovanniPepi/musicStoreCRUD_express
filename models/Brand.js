@@ -3,12 +3,7 @@ const Schema = mongose.Schema;
 
 const BrandSchema = new Schema({
   name: String,
-  types: { type: Schema.Types.ObjectId, ref: "Type", required: true },
-  instruments: {
-    type: Schema.Types.ObjectId,
-    ref: "Instrument",
-    required: true,
-  },
+  description: String,
   url: String,
 });
 

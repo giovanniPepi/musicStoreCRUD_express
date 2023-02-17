@@ -54,7 +54,7 @@ function instrumentCreate(name, type, brand, price, numberInStock, imageURL) {
 }
 
 function brandCreate(name, types, instruments) {
-  const genre = new Brand({ name: name, types: types, instruments });
+  const genre = new Brand({ name: name, description });
 
   brand.save(function (err) {
     if (err) {
@@ -71,7 +71,6 @@ function typeCreate(name, description, brands) {
   typeDetail = {
     name,
     description,
-    brands,
   };
 
   const type = new Type(typedetail);
@@ -87,17 +86,65 @@ function typeCreate(name, description, brands) {
 }
 
 // This function will call our helper function to create the items
-function createInstrumentInstances(cb) {
+function createTypesBrands(cb) {
   async.series(
     [
+      // First we create some instrument types
       function (callback) {
-        instrumentCreate(
-          "TRBX 304",
+        typeCreate(
           "Bass guitar",
+          "is the lowest-pitched member of the guitar family. It is a plucked string instrument similar in appearance and construction to an electric or acoustic guitar, but with a longer neck and scale length, and typically four to six strings or courses.",
+          callback
+        );
+      },
+      function (callback) {
+        typeCreate(
+          "Guitar",
+          "The guitar is a fretted musical instrument that typically has six strings. It is usually held flat against the player's body and played by strumming or plucking the strings with the dominant hand, while simultaneously pressing selected strings against frets with the fingers of the opposite hand. A plectrum or individual finger picks may also be used to strike the strings. The sound of the guitar is projected either acoustically, by means of a resonant chamber on the instrument, or amplified by an electronic pickup and an amplifier. ",
+          callback
+        );
+      },
+      function (callback) {
+        typeCreate(
+          "Eletric Guitar",
+          "An electric guitar is a guitar that requires external amplification in order to be heard at typical performance volumes, unlike a standard acoustic guitar. It uses one or more pickups to convert the vibration of its strings into electrical signals, which ultimately are reproduced as sound by loudspeakers. The sound is sometimes shaped or electronically altered to achieve different timbres or tonal qualities from that of an acoustic guitar via amplifier settings or knobs on the guitar.",
+          callback
+        );
+      },
+      function (callback) {
+        typeCreate(
+          "Musical Keyboard",
+          "A musical keyboard is the set of adjacent depressible levers or keys on a musical instrument. Keyboards typically contain keys for playing the twelve notes of the Western musical scale, with a combination of larger, longer keys and smaller, shorter keys that repeats at the interval of an octave. Pressing a key on the keyboard makes the instrument produce sounds—either by mechanically striking a string or tine (acoustic and electric piano, clavichord), plucking a string (harpsichord), causing air to flow through a pipe organ, striking a bell (carillon), or, on electric and electronic keyboards, completing a circuit (Hammond organ, digital piano, synthesizer). Since the most commonly encountered keyboard instrument is the piano, the keyboard layout is often referred to as the piano keyboard. ",
+          callback
+        );
+      },
+      function (callback) {
+        typeCreate(
+          "Drums",
+          "The drum is a member of the percussion group of musical instruments. In the Hornbostel-Sachs classification system, it is a membranophone. Drums consist of at least one membrane, called a drumhead or drum skin, that is stretched over a shell and struck, either directly with the player's hands, or with a percussion mallet, to produce sound. There is usually a resonant head on the underside of the drum. Other techniques have been used to cause drums to make sound, such as the thumb roll. Drums are the world's oldest and most ubiquitous musical instruments, and the basic design has remained virtually unchanged for thousands of years.",
+          callback
+        );
+      },
+
+      // From here and on, create brands
+      function (callback) {
+        brandCreate(
+          "Fender",
+          "The Fender Musical Instruments Corporation (FMIC, or simply Fender) is an American manufacturer of instruments and amplifiers. Fender produces acoustic guitars, bass amplifiers and public address equipment, however it is best known for its solid-body electric guitars and bass guitars, particularly the Stratocaster, Telecaster, Jaguar, Jazzmaster, Precision Bass, and the Jazz Bass. The company was founded in Fullerton, California by Clarence Leonidas 'Leo' Fender in 1946. Its headquarters are in Los Angeles, California. ",
+          callback
+        );
+      },
+      function (callback) {
+        brandCreate(
+          "Gibson",
+          "Gibson Brands, Inc. (formerly Gibson Guitar Corporation) is an American manufacturer of guitars, other musical instruments, and professional audio equipment from Kalamazoo, Michigan, and now based in Nashville, Tennessee. The company was formerly known as Gibson Guitar Corporation and renamed Gibson Brands, Inc. on June 11, 2013",
+          callback
+        );
+      },
+      function (callback) {
+        brandCreate(
           "Yamaha",
-          3300,
-          5,
-          "https://firebasestorage.googleapis.com/v0/b/musicstorestorage.appspot.com/o/TRBX304MGR-large.jpg.auto.webp?alt=media&token=93a3a6bc-e174-4d12-b3f1-febad1e5ddec",
+          `Yamaha Corporation (ヤマハ株式会社, Yamaha kabushiki gaisha, /ˈjæməˌhɑː/; Japanese pronunciation: [jamaha]) is a Japanese multinational corporation and conglomerate with a very wide range of products and services. It is one of the constituents of Nikkei 225 and is the world's largest musical instrument manufacturing company. The former motorcycle division was established in 1955 as Yamaha Motor Co., Ltd., which started as an affiliated company but later became independent, although Yamaha Corporation is still a major shareholder. `,
           callback
         );
       },
@@ -107,78 +154,31 @@ function createInstrumentInstances(cb) {
   );
 }
 
-function createBooks(cb) {
+function createInstrumentInstances(cb) {
   async.parallel(
     [
+      // Now we create the instruments referencing to types/brands created before
       function (callback) {
-        bookCreate(
-          "The Name of the Wind (The Kingkiller Chronicle, #1)",
-          "I have stolen princesses back from sleeping barrow kings. I burned down the town of Trebon. I have spent the night with Felurian and left with both my sanity and my life. I was expelled from the University at a younger age than most people are allowed in. I tread paths by moonlight that others fear to speak of during day. I have talked to Gods, loved women, and written songs that make the minstrels weep.",
-          "9781473211896",
-          authors[0],
-          [genres[0]],
+        instrumentCreate(
+          "TRBX 304",
+          brands[2],
+          types[0],
+          3300,
+          5,
+          "The Yamaha TRBX304 bass guitar brings versatility, killer looks, and amazing performance together in a complete package. This sleek-looking, great-sounding bass gives you a comfortable Yamaha body shape and a fast-action bolt-on 5-piece maple/mahogany neck with a smooth-playing rosewood fingerboard. A pair of humbucking pickups deliver hum-free sound and the Performance EQ active circuit instantly optimizes your bass for different playing styles. Factor in the Yamaha TRBX304's solid hardware and thoughtful design, and you've got a bass that's ready to conquer any stage.",
+          "https://firebasestorage.googleapis.com/v0/b/musicstorestorage.appspot.com/o/TRBX304MGR-large.jpg.auto.webp?alt=media&token=93a3a6bc-e174-4d12-b3f1-febad1e5ddec",
           callback
         );
       },
       function (callback) {
-        bookCreate(
-          "The Wise Man's Fear (The Kingkiller Chronicle, #2)",
-          "Picking up the tale of Kvothe Kingkiller once again, we follow him into exile, into political intrigue, courtship, adventure, love and magic... and further along the path that has turned Kvothe, the mightiest magician of his age, a legend in his own time, into Kote, the unassuming pub landlord.",
-          "9788401352836",
-          authors[0],
-          [genres[0]],
-          callback
-        );
-      },
-      function (callback) {
-        bookCreate(
-          "The Slow Regard of Silent Things (Kingkiller Chronicle)",
-          "Deep below the University, there is a dark place. Few people know of it: a broken web of ancient passageways and abandoned rooms. A young woman lives there, tucked among the sprawling tunnels of the Underthing, snug in the heart of this forgotten place.",
-          "9780756411336",
-          authors[0],
-          [genres[0]],
-          callback
-        );
-      },
-      function (callback) {
-        bookCreate(
-          "Apes and Angels",
-          "Humankind headed out to the stars not for conquest, nor exploration, nor even for curiosity. Humans went to the stars in a desperate crusade to save intelligent life wherever they found it. A wave of death is spreading through the Milky Way galaxy, an expanding sphere of lethal gamma ...",
-          "9780765379528",
-          authors[1],
-          [genres[1]],
-          callback
-        );
-      },
-      function (callback) {
-        bookCreate(
-          "Death Wave",
-          "In Ben Bova's previous novel New Earth, Jordan Kell led the first human mission beyond the solar system. They discovered the ruins of an ancient alien civilization. But one alien AI survived, and it revealed to Jordan Kell that an explosion in the black hole at the heart of the Milky Way galaxy has created a wave of deadly radiation, expanding out from the core toward Earth. Unless the human race acts to save itself, all life on Earth will be wiped out...",
-          "9780765379504",
-          authors[1],
-          [genres[1]],
-          callback
-        );
-      },
-      function (callback) {
-        bookCreate(
-          "Test Book 1",
-          "Summary of test book 1",
-          "ISBN111111",
-          authors[4],
-          [genres[0], genres[1]],
-          callback
-        );
-      },
-      function (callback) {
-        bookCreate(
-          "Test Book 2",
-          "Summary of test book 2",
-          "ISBN222222",
-          authors[4],
-          false,
-          callback
-        );
+        "Player Stratocaster 3-color",
+          brands[0],
+          types[2],
+          8999,
+          3,
+          "The inspiring sound of a Stratocaster is one of the foundations of Fender. Featuring this classic sound—bell-like high end, punchy mids and robust low end, combined with crystal-clear articulation—the fat-sounding Player Stratocaster HSH is packed with authentic Fender feel and style. It’s ready to serve your musical vision, it’s versatile enough to handle any style of music and it’s the perfect platform for creating your own sound.",
+          "https://firebasestorage.googleapis.com/v0/b/musicstorestorage.appspot.com/o/Screenshot%20from%202023-02-17%2006-37-19.png?alt=media&token=172b00cf-f91b-4158-a310-a4c692c51cf2";
+        callback;
       },
     ],
     // optional callback

@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 const TypeSchema = new Schema({
   name: String,
   description: String,
-  brands: { type: Schema.Types.ObjectId, ref: "Brand", required: true },
   url: String,
 });
 

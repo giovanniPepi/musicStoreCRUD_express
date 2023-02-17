@@ -8,11 +8,11 @@ const InstrumentSchema = new Schema({
   type,
   // We set a minimum and maxium (arbirtrary) price
   price: { type: Number, min: 1, max: 999999, required: true },
-  description: String,
   // Number of instances of this item in stock
   numberInStock: { type: Number, min: 0, max: 999999, required: true },
-  url: String,
+  description: String,
   imageURL: String,
+  url: String,
 });
 
 // Virtual used to get the url from the instruments _id in the database:
