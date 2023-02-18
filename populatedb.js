@@ -173,8 +173,8 @@ function createInstrumentInstances(cb) {
       function (callback) {
         instrumentCreate(
           "Player Stratocaster 3-color",
-          [brands[0]],
-          [types[2]],
+          brands[0],
+          types[2],
           8999,
           3,
           "The inspiring sound of a Stratocaster is one of the foundations of Fender. Featuring this classic sound—bell-like high end, punchy mids and robust low end, combined with crystal-clear articulation—the fat-sounding Player Stratocaster HSH is packed with authentic Fender feel and style. It’s ready to serve your musical vision, it’s versatile enough to handle any style of music and it’s the perfect platform for creating your own sound.",
@@ -185,8 +185,8 @@ function createInstrumentInstances(cb) {
       function (callback) {
         instrumentCreate(
           "PSR Series PSR-F51",
-          [brands[2]],
-          [types[3]],
+          brands[2],
+          types[3],
           699,
           15,
           "Our principal aim in designing the PSR-F51 was basic functionality that is both straightforward and user-friendly. As a result, we have developed a keyboard that anyone will find easy to operate and play. Using the intuitive panel, simply select a voice and rhythm to start playing. The PSR-F51's compact and lightweight design packs in a regular size keyboard together with 61 keys, 120 Voices and 114 Rhythms from all over the world. What’s more, this instrument is ideally suited to a wide range of different playing scenarios; not only is the PSR-F51 great for beginners and students, you can also power it with batteries for musical performance on the road. ",
@@ -197,8 +197,8 @@ function createInstrumentInstances(cb) {
       function (callback) {
         instrumentCreate(
           "GigMaker",
-          [brands[2]],
-          [types[4]],
+          brands[2],
+          types[4],
           7799,
           4,
           "The new Yamaha GigMaker drum set is exactly what any beginner or intermediate player would love to play. This drum set utilizes all Yamaha hardware featuring hex tom ball joints with 5 new unique wrapped sparkle finishes.",
