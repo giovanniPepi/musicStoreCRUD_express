@@ -33,23 +33,23 @@ router.post(
 router.get("/instruments", instrumentController.instrument_list);
 
 // Brands
-router.get("/instrument/create", brandController.brand_create_get);
-router.post("/instrument/create", brandController.brand_create_post);
-router.get("/instrument/:id/delete", brandController.brand_delete_get);
-router.post("/instrument/:id/delete", brandController.brand_delete_post);
-router.get("/instrument/:id/update", brandController.brand_update_get);
-router.post("/instrument/:id/update", brandController.brand_update_post);
+router.get("/brand/create", brandController.brand_create_get);
+router.post("/brand/create", brandController.brand_create_post);
+router.get("/brand/:id/delete", brandController.brand_delete_get);
+router.post("/brand/:id/delete", brandController.brand_delete_post);
+router.get("/brand/:id/update", brandController.brand_update_get);
+router.post("/brand/:id/update", brandController.brand_update_post);
 // List all
-router.get("/instruments", brandController.brand_list);
+router.get("/brands", brandController.brand_list);
 
 // types
-router.get("/instrument/create", typeController.type_create_get);
-router.post("/instrument/create", typeController.type_create_post);
-router.get("/instrument/:id/delete", typeController.type_delete_get);
-router.post("/instrument/:id/delete", typeController.type_delete_post);
-router.get("/instrument/:id/update", typeController.type_update_get);
-router.post("/instrument/:id/update", typeController.type_update_post);
+router.get("/type/create", typeController.type_create_get);
+router.post("/type/create", typeController.type_create_post);
+router.get("/type/:id/delete", typeController.type_delete_get);
+router.post("/type/:id/delete", typeController.type_delete_post);
+router.get("/type/:id/update", typeController.type_update_get);
+router.post("/type/:id/update", typeController.type_update_post);
 // List all
-router.get("/instruments", typeController.type_list);
+router.get("/types", typeController.type_list);
 
 module.exports = router;
