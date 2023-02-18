@@ -1,15 +1,9 @@
 const mongoose = require("mongoose");
-const Schema = mongose.Schema;
+const Schema = mongoose.Schema;
 
 const BrandSchema = new Schema({
-  name: String,
-  types: { type: Schema.Types.ObjectId, ref: "Type", required: true },
-  instruments: {
-    type: Schema.Types.ObjectId,
-    ref: "Instrument",
-    required: true,
-  },
-  url: String,
+  name: { type: String, required: true },
+  description: { type: String, required: true },
 });
 
 // Virtual to get the url for all instruments of a brand

@@ -3,10 +3,8 @@ const Schema = mongoose.Schema;
 
 // TypeSchema refers to types of instruments in store
 const TypeSchema = new Schema({
-  name: String,
-  description: String,
-  brand: { type: Schema.Types.ObjectId, ref: "Brand", required: true },
-  url: String,
+  name: { type: String, required: true },
+  description: { type: String, required: true },
 });
 
 // Virtual to get all instruments from this type
