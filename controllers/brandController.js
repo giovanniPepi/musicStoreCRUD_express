@@ -17,7 +17,7 @@ exports.brand_update_get = (req, res, next) = {}
 
 exports.brand_update_post = (req, res, next) = {}
 
-
+exports.brand_list = (req, res, next) = {};
 
 
 
