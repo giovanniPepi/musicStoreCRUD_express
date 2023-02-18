@@ -21,19 +21,21 @@ const types = [];
 // Helper functions to store info to be created in the db
 function instrumentCreate(
   name,
-  type,
   brand,
+  type,
   price,
   numberInStock,
+  description,
   imageURL,
   cb
 ) {
   instrumentDetail = {
     name,
-    type,
     brand,
+    type,
     price,
     numberInStock,
+    description,
     imageURL,
   };
 
