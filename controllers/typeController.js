@@ -16,5 +16,3 @@ exports.type_delete_post = (req, res, next) => {};
 exports.type_update_get = (req, res, next) => {};
 
 exports.type_update_post = (req, res, next) => {};
-
-exports.type_list = (req, res, next) => {};

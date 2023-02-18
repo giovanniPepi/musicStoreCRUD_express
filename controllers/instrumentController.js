@@ -27,7 +27,6 @@ exports.index = (req, res, next) => {
     }
   );
 };
-
 exports.instrument_detail = (req, res, next) => {};
 
 exports.instrument_create_get = (req, res, next) => {};
