@@ -1,0 +1,14 @@
+extends layout 
+
+block content 
+
+  h1 Name: #{instrument.name}
+  p #[strong Brand: ]
+    a(href=instrument.brand.url) #{instrument.brand.name}
+  img(src=instrument.imageURL alt=instrument.name)
+  p #[strong Type: ] 
+    a(href=instrument.type.url) #{instrument.type.name}
+  p #[strong Number in stock: ] #{instrument.numberInStock}
+  p #[strong Description: ] #{instrument.description}
+
+

@@ -11,24 +11,27 @@ const typeController = require("../controllers/typeController");
 
 // home page, redirected to catalog
 router.get("/", instrumentController.index);
-router.get("/instrument/create", instrumentController.instrument_create_get);
-router.post("/instrument/create", instrumentController.instrument_create_post);
+router.get("/instruments/create", instrumentController.instrument_create_get);
+router.post("/instruments/create", instrumentController.instrument_create_post);
 router.get(
-  "/instrument/:id/delete",
+  "/instruments/:id/delete",
   instrumentController.instrument_delete_get
 );
 router.post(
-  "/instrument/:id/delete",
+  "/instruments/:id/delete",
   instrumentController.instrument_delete_post
 );
 router.get(
-  "/instrument/:id/update",
+  "/instruments/:id/update",
   instrumentController.instrument_update_get
 );
 router.post(
-  "/instrument/:id/update",
+  "/instruments/:id/update",
   instrumentController.instrument_update_post
 );
+
+router.get("/instruments/:id", instrumentController.instrument_detail);
+
 // List all
 router.get("/instruments", instrumentController.instrument_list);
 

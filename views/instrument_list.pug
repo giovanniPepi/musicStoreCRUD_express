@@ -9,10 +9,8 @@ block content
         a(href=instrument.url) #{instrument.name} - #{instrument.brand}
         div
           img(src=instrument.imageURL alt=instrument.name)
-          p Type #{instrument.type}
           p #[strong R$  !{instrument.price}] 
           p #[strong !{instrument.numberInStock} left!]
-          p #{instrument.description}
         
     else 
       li There are no instruments!

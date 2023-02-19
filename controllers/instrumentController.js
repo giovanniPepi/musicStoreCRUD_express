@@ -27,7 +27,39 @@ exports.index = (req, res, next) => {
     }
   );
 };
-exports.instrument_detail = (req, res, next) => {};
+exports.instrument_detail = (req, res, next) => {
+  async.parallel(
+    {
+      instrument(callback) {
+        // use the id encoded by the url
+        Instrument.findById(req.params.id)
+          .populate("name")
+          .populate("brand")
+          .populate("type")
+          .exec(callback);
+      },
+      brand(callback) {
+        Brand.find({ name: req.params.id }).exec(callback);
+      },
+      type(callback) {
+        Type.find({ name: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.instrument == null) {
+        err.status = 404;
+        return next(err);
+      }
+      res.render("instrument_detail", {
+        title: results.instrument.name,
+        instrument: results.instrument,
+        brand: results.brand,
+        type: results.type,
+      });
+    }
+  );
+};
 
 exports.instrument_create_get = (req, res, next) => {};
 
