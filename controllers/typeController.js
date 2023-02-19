@@ -1,7 +1,36 @@
 const Type = require("../models/Type");
 const async = require("async");
+const Instrument = require("../models/Instrument");
 
-exports.type_detail = (req, res, next) => {};
+exports.type_detail = (req, res, next) => {
+  async.parallel(
+    {
+      type(callback) {
+        // use the id encoded by the url
+        Type.findById(req.params.id).populate("name").exec(callback);
+      },
+      // find all the instruments that have the same type
+      instruments_with_this_type(callback) {
+        Instrument.find({ type: req.params.id })
+          .populate("name")
+          .exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.type == null) {
+        err.status = 404;
+        return next(err);
+      }
+      res.render("type_detail", {
+        title: results.type.name,
+        description: results.type.description,
+        instrumentList: results.instruments_with_this_type,
+        titleLowerCase: results.type.name.toLowerCase(),
+      });
+    }
+  );
+};
 
 exports.type_create_get = (req, res, next) => {};
 

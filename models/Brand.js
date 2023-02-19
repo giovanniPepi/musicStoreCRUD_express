@@ -8,7 +8,7 @@ const BrandSchema = new Schema({
 
 // Virtual to get the url for all instruments of a brand
 BrandSchema.virtual("url").get(function () {
-  return `/catalog/${this._id}`;
+  return `/catalog/brand/${this._id}`;
 });
 
 module.exports = mongoose.model("Brand", BrandSchema);

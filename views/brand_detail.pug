@@ -1,0 +1,13 @@
+extends layout 
+
+block content 
+
+  h1 #{brand.name}
+  p #[strong Description: ] #{brand.description}
+  p #[strong Instruments sold: ]
+  ul
+    each instrument in instruments 
+      li      
+        a(href=instrument.url) #{instrument.name}
+    else 
+      p Currently, there are no instruments sold by this brand.
