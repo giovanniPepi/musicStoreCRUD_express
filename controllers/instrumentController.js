@@ -82,6 +82,7 @@ exports.instrument_list = (req, res, next) => {
   )
     .sort({ title: 1 })
     .populate("name")
+    .populate("brand")
     .exec(function (err, list_instruments) {
       if (err) {
         return next(err);
