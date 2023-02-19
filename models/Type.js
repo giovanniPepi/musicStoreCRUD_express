@@ -9,7 +9,7 @@ const TypeSchema = new Schema({
 
 // Virtual to get all instruments from this type
 TypeSchema.virtual("url").get(function () {
-  return `/catalog/${this._id}`;
+  return `/catalog/type/${this._id}`;
 });
 
 module.exports = mongoose.model("Type", TypeSchema);

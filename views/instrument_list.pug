@@ -6,7 +6,7 @@ block content
   ul 
     each instrument in instrument_list 
       li 
-        a(href=instrument.url) #{instrument.name} - #{instrument.brand}
+        a(href=instrument.url) #{instrument.name} - #{instrument.brand.name}
         div
           img(src=instrument.imageURL alt=instrument.name)
           p #[strong R$  !{instrument.price}] 

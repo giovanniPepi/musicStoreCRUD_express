@@ -1,7 +1,36 @@
 const Brand = require("../models/Brand");
+const Instrument = require("../models/Instrument");
+const Type = require("../models/Type");
 const async = require("async");
 
-exports.brand_detail = (req, res, next) => {};
+exports.brand_detail = (req, res, next) => {
+  async.parallel(
+    {
+      brand(callback) {
+        // use the id encoded by the url
+        Brand.findById(req.params.id).populate("name").exec(callback);
+      },
+      // get all instruments associated with this brand
+      brand_instruments(callback) {
+        Instrument.find({ brand: req.params.id }, "name description type").exec(
+          callback
+        );
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.brand == null) {
+        err.status = 404;
+        return next(err);
+      }
+      res.render("brand_detail", {
+        title: results.brand.name,
+        brand: results.brand,
+        instruments: results.brand_instruments,
+      });
+    }
+  );
+};
 
 exports.brand_create_get = (req, res, next) => {};
 

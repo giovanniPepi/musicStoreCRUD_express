@@ -2,7 +2,7 @@ extends layout
 
 block content 
 
-  h1 Name: #{instrument.name}
+  h1 #{instrument.name}
   p #[strong Brand: ]
     a(href=instrument.brand.url) #{instrument.brand.name}
   img(src=instrument.imageURL alt=instrument.name)

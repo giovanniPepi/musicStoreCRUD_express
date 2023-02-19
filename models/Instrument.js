@@ -16,7 +16,7 @@ const InstrumentSchema = new Schema({
 
 // Virtual used to get the url from the instruments _id in the database:
 InstrumentSchema.virtual("url").get(function () {
-  return `/catalog/instruments/${this._id}`;
+  return `/catalog/instrument/${this._id}`;
 });
 
 // Export

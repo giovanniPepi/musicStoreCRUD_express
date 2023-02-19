@@ -1,0 +1,15 @@
+extends layout 
+
+block content 
+
+  h1 #{title}
+  p #[strong Description: ] #{description}
+  p Available #{titleLowerCase}s: 
+  ul
+    each instrument in instrumentList 
+      li 
+        a(href=instrument.url) #{instrument.name}
+    else 
+      p We currently have no #{titleLowerCase}s in stock.
+  
+  
