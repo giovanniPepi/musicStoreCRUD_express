@@ -4,12 +4,10 @@ block content
   h1= title
   p Welcome to #[em Music Store CRUD!]
 
-  h1 Dynamic Content 
-
   if error 
     p Error getting data from db 
   else 
-    p Statistics: 
+    h3 Database Statistics: 
 
     ul 
       li #[strong Instruments]: !{data.instrument_count}

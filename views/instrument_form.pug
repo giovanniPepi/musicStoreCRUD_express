@@ -1,0 +1,51 @@
+extends layout 
+
+block content 
+
+  h1=title
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='name') Name: 
+      input#name.form-control(type='text' placeholder='TRBX 304' required='true' name='name' value=(undefined===name? '' : instrument.name))
+    div.form-group
+      label(for='brand') Brand: 
+      select#brand.form-control(type='select', placeholder='Brand Name', name='brand', required='true')
+        - brands.sort(function(a, b) {let textA = a.name; let textB = b.name; return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for brand in brands 
+          if instrument 
+            option(value=brand._id selected=(brand._id.toString()===instrument.brand._id.toString() ? 'selected' : false) ) #{brand.name}
+          else 
+            option(value=brand._id) #{brand.name}
+    div.form-group
+      label(for='type') Instrument Type: 
+      select#type.form-control(type='select', placeholder='Instrument Type', name='type', required='true')
+        - types.sort(function(a, b) {let textA = a.name; let textB = b.name; return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for choice in types
+          if instrument 
+            option(value=choice._id selected=(choice._id.toString()===instrument.type._id.toString() ? 'selected' : false) ) #{choice.name}
+          else 
+            option(value=choice._id) #{choice.name}
+    div.form-group
+      label(for='price') Price: 
+      input#price.form-control(type='tel' placeholder='0' name='price' required='true' value=(undefined===price? 0 : instrument.price))
+
+    div.form-group
+      label(for='numberInStock') Number in stock: 
+      input#numberInStock.form-control(type='tel' placeholder='0' required='true' name="numberInStock" value=(undefined===numberInStock? 0 : instrument.numberInStock))
+
+    div.form-group
+      label(for='description') Description: 
+      input#description.form-control(type='text' placeholder=`The Yamaha TRBX304 bass...` required='true' name='description' value=(undefined===description? '' : instrument.description))
+
+    div.form-group
+      label(for='imageURL') Image: 
+      input#imageURL.form-control(type='text' placeholder='https://...' required='true' name='imageURL' value=(undefined===imageURL? '' : instrument.imageURL))
+
+    button.btn.btn-primary(type='submit') Submit
+  if errors 
+    ul 
+      for error in errors 
+        li!=error.msg
+
+

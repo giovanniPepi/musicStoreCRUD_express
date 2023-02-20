@@ -61,9 +61,97 @@ exports.instrument_detail = (req, res, next) => {
   );
 };
 
-exports.instrument_create_get = (req, res, next) => {};
+// Handles instrument creation via form GET
+exports.instrument_create_get = (req, res, next) => {
+  // Gets all brands and types to fill the form values
+  async.parallel(
+    {
+      brands(callback) {
+        Brand.find(callback);
+      },
+      types(callback) {
+        Type.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      res.render("instrument_form", {
+        title: "Create instrument",
+        brands: results.brands,
+        types: results.types,
+      });
+    }
+  );
+};
 
-exports.instrument_create_post = (req, res, next) => {};
+// POST route
+exports.instrument_create_post = [
+  // Validation and sanitization
+  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("price", "Price must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("numberInStock", "Number in stock must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("description", "Description must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  // Not escaped until we add an uploader
+  // THIS IS UNSAFE until then! :)
+  body("imageURL", "ImageURL must not be emtpy").trim().isLength({ min: 1 }),
+
+  (req, res, next) => {
+    // Extract validation errors from the request:
+    const errors = validationResult(req);
+
+    // Create new Instrument obj!
+    const instrument = new Instrument({
+      name: req.body.name,
+      brand: req.body.brand,
+      type: req.body.type,
+      price: req.body.price,
+      numberInStock: req.body.numberInStock,
+      description: req.body.description,
+      imageURL: req.body.imageURL,
+    });
+
+    console.log(instrument);
+
+    if (!errors.isEmpty()) {
+      // There are errors, render the form again with sanitized data
+      // same function from the GET route:
+      async.parallel(
+        {
+          brands(callback) {
+            Brand.find(callback);
+          },
+          types(callback) {
+            Type.find(callback);
+          },
+        },
+        (err, results) => {
+          if (err) return next(err);
+          res.render("instrument_form", {
+            title: "Create instrument",
+            brands: results.brands,
+            types: results.types,
+            instrument, // pass the obj created
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    }
+
+    // Data from form is valid, save instrument to DB
+    instrument.save((err) => {
+      if (err) return next(err);
+      // Succesful, redirect to new instrument
+      res.redirect(instrument.url);
+    });
+  },
+];
 
 exports.instrument_delete_get = (req, res, next) => {};
 
