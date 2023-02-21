@@ -118,9 +118,9 @@ exports.instrument_create_post = [
 
     console.log(instrument);
 
+    // There are errors, render the form again with sanitized data
+    // same function from the GET route:
     if (!errors.isEmpty()) {
-      // There are errors, render the form again with sanitized data
-      // same function from the GET route:
       async.parallel(
         {
           brands(callback) {
@@ -134,7 +134,7 @@ exports.instrument_create_post = [
           if (err) return next(err);
           res.render("instrument_form", {
             title: "Create instrument",
-            brands: results.brands,
+            brands: results.instruments,
             types: results.types,
             instrument, // pass the obj created
             errors: errors.array(),
@@ -144,12 +144,43 @@ exports.instrument_create_post = [
       return;
     }
 
-    // Data from form is valid, save instrument to DB
-    instrument.save((err) => {
-      if (err) return next(err);
-      // Succesful, redirect to new instrument
-      res.redirect(instrument.url);
-    });
+    // We check if the name already exists in the DB before saving it
+    const existsInDb = async.parallel(
+      {
+        instruments(callback) {
+          Instrument.find(callback);
+        },
+        instrument(callback) {
+          Instrument.find({ name: req.body.name })
+            .populate("name")
+            .exec(callback);
+        },
+        types(callback) {
+          Type.find(callback);
+        },
+      },
+      (err, results) => {
+        if (err) return next(err);
+        // Query array has returned something from the db, therefore there is
+        // already a brand with this name
+        if (results.instrument.length > 0) {
+          res.render("instrument_form", {
+            title: "Create a new Instrument",
+            brands: results.instruments,
+            types: results.types,
+            instrument,
+            errors: [{ msg: "There is already a strument with this name" }],
+          });
+        } else {
+          // Data from form is valid, save instrument to DB
+          instrument.save((err) => {
+            if (err) return next(err);
+            // Succesful, redirect to new instrument
+            res.redirect(instrument.url);
+          });
+        }
+      }
+    );
   },
 ];
 
