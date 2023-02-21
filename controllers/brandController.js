@@ -32,7 +32,23 @@ exports.brand_detail = (req, res, next) => {
   );
 };
 
-exports.brand_create_get = (req, res, next) => {};
+exports.brand_create_get = (req, res, next) => {
+  // Gets all brands from db
+  async.parallel(
+    {
+      brands(callback) {
+        Brand.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      res.render("brand_form", {
+        title: "Create a new Brand",
+        brands: results.brands,
+      });
+    }
+  );
+};
 
 exports.brand_create_post = (req, res, next) => {};
 

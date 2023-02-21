@@ -1,0 +1,30 @@
+extends layout 
+
+block content 
+
+  h1=title
+
+  h3 Brands in store:
+  ul 
+    each brand in brands 
+      li 
+        a(href=brand.url) #{brand.name}
+  p If a brand is not listed, you can add it: 
+
+  form(method='POST' action='')
+    div.form-group 
+      label(for='name')
+      input#name.form-control(type='text' placeholder='Fender' name='name' value=(undefined==name? '' : brand.name))
+    div.form-group
+      label(for='description')
+      input#description.form-control(type='text' placeholder='Fender is an american...' name='description' value=(undefined==description? '' : brand.description))
+    div.form-group
+      button.btn.btn-primary(type='submit') Submit
+
+    if errors 
+        ul 
+          for error in errors 
+            li!=error.msg
+
+
+
