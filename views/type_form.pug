@@ -1,0 +1,30 @@
+extends layout 
+
+block content 
+
+  h1=title
+
+  h3 Instrument Types in Store:
+  ul 
+    each type in types
+      li 
+        a(href=type.url) #{type.name}
+  p If an instrument type is not listed, you can add it: 
+
+  form(method='POST' action='')
+    div.form-group 
+      label(for='name')
+      input#name.form-control(type='text' placeholder='Bass guitar' name='name' value=(undefined==name? '' : type.name))
+    div.form-group
+      label(for='description')
+      input#description.form-control(type='text' placeholder='A bass guitar is the lowest...' name='description' value=(undefined==description? '' : type.description))
+    div.form-group
+      button.btn.btn-primary(type='submit') Submit
+
+    if errors 
+        ul 
+          for error in errors 
+            li!=error.msg
+
+
+
