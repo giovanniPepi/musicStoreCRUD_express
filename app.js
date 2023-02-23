@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 var createError = require("http-errors");
 var express = require("express");
@@ -11,6 +12,8 @@ var usersRouter = require("./routes/users");
 const catalogRouter = require("./routes/catalog");
 
 var app = express();
+// this package let us use PUT and DELETE to properly handle HTTP requests
+app.use(methodOverride("_method"));
 dotenv.config();
 
 // DB
