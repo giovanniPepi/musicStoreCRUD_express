@@ -30,6 +30,8 @@ router.post(
   instrumentController.instrument_update_post
 );
 
+router.delete("/instrument/:id", instrumentController.instrument_delete_delete);
+
 router.get("/instrument/:id", instrumentController.instrument_detail);
 
 // List all

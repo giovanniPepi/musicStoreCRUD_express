@@ -192,6 +192,30 @@ exports.instrument_update_get = (req, res, next) => {};
 
 exports.instrument_update_post = (req, res, next) => {};
 
+exports.instrument_delete_delete = (req, res, next) => {
+  console.log("RECEIVED DELETE REQUEST!");
+  async.parallel(
+    {
+      instrument(callback) {
+        Instrument.findById(req.params.id).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.instrument == null) {
+        res.redirect("/catalog/instruments");
+      }
+      // Sucessfull query, delete the instrument:
+      Instrument.findByIdAndRemove(req.body.instrumentid, (err) => {
+        if (err) return next(err);
+        // Sucessfull
+        console.log(`removing ${req.body.instrumentid}...`);
+        res.redirect("/catalog/instruments");
+      });
+    }
+  );
+};
+
 exports.instrument_list = (req, res, next) => {
   // The request includes all the info we want to acess
   // and is passed down to the pug view render

@@ -12,5 +12,7 @@ block content
   p #[strong Description: ] #{instrument.description}
 
   hr
-  form(method='POST' action='/update?_method=DELETE')
+  form(method='POST' action=`${instrument.url}?_method=DELETE`)
+    div.form-group
+      input#instrumentid.form-control(type="hidden", name="instrumentid", required="true", value=instrument._id)
     button(action='submit') Delete Instrument
