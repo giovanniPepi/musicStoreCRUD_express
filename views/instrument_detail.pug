@@ -11,4 +11,6 @@ block content
   p #[strong Number in stock: ] #{instrument.numberInStock}
   p #[strong Description: ] #{instrument.description}
 
-
+  hr
+  form(method='POST' action='/update?_method=DELETE')
+    button(action='submit') Delete Instrument
